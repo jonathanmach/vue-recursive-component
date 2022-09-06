@@ -1,20 +1,28 @@
 <script setup>
 import VSelect from "./components/VSelect.vue";
+import { ref } from 'vue'
+
+const state = ref({
+  "field": "created_at",
+  "operator": "is_equals",
+  "value": "1990-01-01",
+})
+
 const options = [
   {
-    label: "Created at", id: 1,
+    label: "Created at", id: 'created_at', trackBy: 'operator',
     options: [
-      { label: "Is equals", id: 1, children: [{ type: 'date', label: "Date", id: 4 }] },
-      { label: "Is empty", id: 2 },
+      { label: "Is equals", id: 'is_equals', children: [{ type: 'date', label: "Date", id: 4, trackBy:"value" }] },
+      { label: "Is empty", id: 'is_empty' },
       {
-        label: "Is between", id: 3, children: [
-          { type: 'date', label: "From", id: 'from' }, { type: 'date', label: "Date", id: 'to' }]
+        label: "Is between", id: 'is_between', children: [
+          { type: 'date', label: "From", id: 'from', trackBy:"from" }, { type: 'date', label: "Date", id: 'to', trackBy:"to" }]
       },
     ]
   },
   {
-    label: "Active", id: 2,
-    options: [{ label: "Is true", id: 3 }, { label: "Is false", id: 4 }]
+    label: "Active", id: 'active', trackBy: 'operator',
+    options: [{ label: "Is true", id: 'is_true' }, { label: "Is false", id: 'is_false' }]
   }
 ];
 </script>
@@ -22,8 +30,9 @@ const options = [
 <template>
   <main>
     <div class="expression-row">
-      <VSelect :options="options" />
+      <VSelect :options="options" :state="state" trackBy="field" />
     </div>
+    <pre>{{state}}</pre>
   </main>
 </template>
 
