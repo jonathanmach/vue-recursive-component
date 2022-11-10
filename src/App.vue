@@ -3,36 +3,67 @@ import VSelect from "./components/VSelect.vue";
 import { ref } from 'vue'
 
 const state = ref({
-  "field": "created_at",
+  "category": "created_at",
   "operator": "is_equals",
   "value": "1990-01-01",
 })
 
-const options = [
-  {
-    label: "Created at", id: 'created_at', trackBy: 'operator',
-    options: [
-      { label: "Is equals", id: 'is_equals', children: [{ type: 'date', label: "Date", id: 4, trackBy:"value" }] },
-      { label: "Is empty", id: 'is_empty' },
-      {
-        label: "Is between", id: 'is_between', children: [
-          { type: 'date', label: "From", id: 'from', trackBy:"from" }, { type: 'date', label: "Date", id: 'to', trackBy:"to" }]
-      },
-    ]
-  },
-  {
-    label: "Active", id: 'active', trackBy: 'operator',
-    options: [{ label: "Is true", id: 'is_true' }, { label: "Is false", id: 'is_false' }]
-  }
-];
+const options = {
+  type: "dropdown",
+  trackBy: "category",
+  dropdownItems: [
+    {
+      label: "Creation date", id: "created_at",
+      children: [
+        {
+          type: "dropdown", label: "Operator", id: "operator", trackBy: "operator",
+          dropdownItems: [
+            {
+              label: "Is equals", id: "is_equals",
+              children: [{ type: "date", label: "Date", id: 4, trackBy: "value" }],
+            },
+            { label: "Is empty", id: "is_empty" },
+            {
+              label: "Is between", id: "is_between", children: [
+                { type: "date", label: "From", id: "from", trackBy: "from" },
+                { type: "date", label: "Date", id: "to", trackBy: "to" },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      label: "Status", id: "active",
+      children: [
+        {
+          type: "dropdown", label: "Operator", id: "operator", trackBy: "operator",
+          dropdownItems: [
+            { label: "Is active", id: "is_true", },
+            { label: "Is not active", id: "is_false", }
+          ],
+        }
+      ]
+    },
+    {
+      label: "Answers", id: "user_answers",
+      children: [
+        {
+          type: "user-answers", id: "operator", trackBy: "operator",
+          children: [] // This will be built dynamically, based on the selected option
+        }
+      ]
+    },
+  ],
+};
 </script>
 
 <template>
   <main>
     <div class="expression-row">
-      <VSelect :options="options" :state="state" trackBy="field" />
+      <VSelect :option="options" :state="state" trackBy="category" />
     </div>
-    <pre>{{state}}</pre>
+    <pre>{{ state }}</pre>
   </main>
 </template>
 
